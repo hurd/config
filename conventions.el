@@ -27,6 +27,19 @@
                (dtrt-indent-mode t))))
 
 ;;
+;; Interactively Do Things (ido-mode)
+;;
+(require 'ido)
+(ido-mode t)
+
+;;
+;; auto-complete (http://auto-complete.org)
+;;
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.elisp/ac-dict")
+(ac-config-default)
+
+;;
 ;; C/C++ style
 ;;
 (setq c-default-style "Stroustrup")
@@ -54,16 +67,29 @@
 ;;
 ;; php-mode. http://www.ontosys.com/reports/PHP.html
 ;;
-(autoload 'php-mode "php-mode" "PHP editing mode" t)
-(add-to-list 'auto-mode-alist '("\\.html$" . php-mode))
-(add-to-list 'auto-mode-alist '("\\.shtml$" . php-mode))
-(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
-(add-to-list 'auto-mode-alist '("\\.php3$" . php-mode))
-(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+;(autoload 'php-mode "php-mode" "PHP editing mode" t)
+;(add-to-list 'auto-mode-alist '("\\.html$" . php-mode))
+;(add-to-list 'auto-mode-alist '("\\.shtml$" . php-mode))
+;(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
+;(add-to-list 'auto-mode-alist '("\\.php3$" . php-mode))
+;(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+
+;;
+;; web-mode (http://web-mode.org)
+;;
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.mustanche\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.dhtml\\'" . web-mode))
 
 ;;
 ;; python-mode
 ;;
+(add-to-list 'load-path "~/.elisp/python-mode")
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (setq interpreter-mode-alist (cons'("python" . python-mode)
         interpreter-mode-alist))
@@ -88,6 +114,16 @@
 ;;
 (autoload 'css-mode "css-mode" "Mode for editing CSS files" t)
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
+
+;;
+;; ruby-mode
+;;
+(add-to-list 'auto-mode-alist
+             '("\\.\\(?:gemspec\\|irbrc\\|gemrc\\|rake\\|rb\\|ru\\|thor\\)\\'"
+               . ruby-mode))
+(add-to-list 'auto-mode-alist
+             '("\\(Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'"
+               . ruby-mode))
 
 ;;
 ;; Auto insert comment

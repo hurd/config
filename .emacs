@@ -11,9 +11,28 @@
 ;; provide a useful error trace if loading .emacs fails.
 (setq debug-on-error t)
 
+;;
+;; package
+;;
+(when (>= emacs-major-version 24)
+  (require 'package)
+  (package-initialize)
+  (setq package-archives
+               '(("gnu" . "http://elpa.gnu.org/packages/")
+                 ("marmalade" . "http://marmalade-repo.org/packages/")
+                 ("melpa" . "http://melpa.org/packages/")
+                 )
+               )
+  )
+
+;; abbrev
+(setq abbrev-file-name "~/.emacs.d/abbrev_defs")
+
 ;; set my elisp path
 (setq load-path (cons "~/.elisp" load-path))
-
+;;
+;; other settings
+;;
 (load "bindings")
 (load "datetime")
 (load "looknfeel")
@@ -23,11 +42,3 @@
   (load "macosx"))
 (load "utils")
 
-;; package
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (package-initialize)
-  (add-to-list 'package-archives
-               '("marmalade" . "http://marmalade-repo.org/packages/") t)
-  (add-to-list 'package-archives
-               '("melpa" . "http://melpa.milkbox.net/packages/") t))
