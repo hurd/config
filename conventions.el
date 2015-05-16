@@ -89,7 +89,8 @@
 ;;
 ;; python-mode
 ;;
-(add-to-list 'load-path "~/.elisp/python-mode")
+(setq py-install-directory "~/.elisp/python-mode")
+(add-to-list 'load-path py-install-directory)
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (setq interpreter-mode-alist (cons'("python" . python-mode)
         interpreter-mode-alist))
