@@ -95,6 +95,9 @@
 (setq interpreter-mode-alist (cons'("python" . python-mode)
         interpreter-mode-alist))
 (autoload 'python-mode "python-mode" "Python editing mode." t)
+;; fix backspace problem
+(add-hook 'python-mode-hook
+          (lambda () (define-key python-mode-map (kbd "DEL") 'py-electric-backspace)))
 
 ;;
 ;; d-mode
