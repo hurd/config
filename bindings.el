@@ -4,14 +4,13 @@
 ;; key bindings
 ;;
 
-(global-set-key [delete] 'delete-char)
+;(global-set-key [delete] 'delete-char)
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\^h" 'backward-delete-char)
 ;; reload .emacs
 ;(global-set-key "\M-r"
 ;                '(lambda () (interactive) (load-file "~/.emacs")))
-;; delete should be delete!
-(global-set-key [delete] 'delete-char)
+
 ;; disable ctrl Z
 (global-unset-key "\^z")
 ;; disable that minize window thing
