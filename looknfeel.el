@@ -73,4 +73,4 @@
 ;; Theme 
 ;;
 (when (>= emacs-major-version 24)
-  (load-theme 'wombat t))
+  (load-theme 'manoj-dark t))

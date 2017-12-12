@@ -12,6 +12,8 @@
 (setq-default indent-tabs-mode nil)
 ;; UNIX mode for EOL char
 (setq inhibit-eol-conversion t)
+;; delete-trailing-whitespace
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; emacs24 stuff
 (when (>= emacs-major-version 24)
   (setq delete-active-region nil))
@@ -79,12 +81,14 @@
 ;;
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.mustanche\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.dhtml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 ;;
 ;; python-mode
