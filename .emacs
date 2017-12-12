@@ -9,6 +9,7 @@
 ;;
 
 ;; provide a useful error trace if loading .emacs fails.
+;;(setq max-specpdl-size 32000)
 (setq debug-on-error t)
 
 ;;
@@ -41,4 +42,3 @@
 (when (eq system-type 'darwin)
   (load "macosx"))
 (load "utils")
-
