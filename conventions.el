@@ -134,6 +134,13 @@
                . ruby-mode))
 
 ;;
+;; textile mode
+;; https://github.com/juba/textile-mode
+;;
+(require 'textile-mode)
+(add-to-list 'auto-mode-alist '("\\.textile\\'" . textile-mode))
+
+;;
 ;; Auto insert comment
 ;;
 (global-unset-key "\C-t")
