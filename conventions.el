@@ -17,6 +17,9 @@
 ;; emacs24 stuff
 (when (>= emacs-major-version 24)
   (setq delete-active-region nil))
+;; hungry-delete
+(require 'hungry-delete)
+(global-hungry-delete-mode)
 
 (add-hook 'prog-mode-hook
           '(lambda()
