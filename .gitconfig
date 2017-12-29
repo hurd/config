@@ -3,3 +3,4 @@
 	name = Charlie Choe
 [core]
 	excludesfiles = /home/hurd/.gitignore_global
+	editor = emacs
