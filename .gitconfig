@@ -1,3 +1,5 @@
 [user]
 	email = justhurd@gmail.com
 	name = Charlie Choe
+[core]
+	excludesfiles = /home/hurd/.gitignore_global
