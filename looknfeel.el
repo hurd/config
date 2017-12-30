@@ -65,12 +65,26 @@
   ;; turn on image viewing
   (auto-image-file-mode t)
   ;; turn off/on cursor blinking
-  (blink-cursor-mode t)    
+  (blink-cursor-mode t)
   ;; turn off toolbar
   (tool-bar-mode 0))
 
+;; enable mouse reporting for terminal emulators
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (global-set-key [mouse-4] (lambda ()
+                              (interactive)
+                              (scroll-down-line 1)))
+  (global-set-key [mouse-5] (lambda ()
+                              (interactive)
+                              (scroll-up 1)))
+  (defun track-mouse (e))
+  (setq mouse-sel-mode t)
+)
+
 ;;
-;; Theme 
+;; Theme
 ;;
 (when (>= emacs-major-version 24)
   (load-theme 'manoj-dark t))
