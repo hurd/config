@@ -1,6 +1,8 @@
 [user]
-	email = justhurd@gmail.com
-	name = Charlie Choe
+	email = hurd@aliseon.com
+	name = hurd
 [core]
 	excludesfiles = /home/hurd/.gitignore_global
 	editor = emacs
+[push]
+	default = matching
