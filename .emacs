@@ -32,6 +32,32 @@
       (package-install package)))
   )
 
+;; install
+(unless (package-installed-p 'hungry-delete)
+  (package-refresh-contents)
+  (package-install 'hungry-delete))
+(unless (package-installed-p 'auto-complete)
+  (package-refresh-contents)
+  (package-install 'auto-complete))
+(unless (package-installed-p 'web-mode)
+  (package-refresh-contents)
+  (package-install 'web-mode))
+(unless (package-installed-p 'python-mode)
+  (package-refresh-contents)
+  (package-install 'python-mode))
+(unless (package-installed-p 'd-mode)
+  (package-refresh-contents)
+  (package-install 'd-mode))
+(unless (package-installed-p 'cl)
+  (package-refresh-contents)
+  (package-install 'cl))
+(unless (package-installed-p 'ruby-mode)
+  (package-refresh-contents)
+  (package-install 'ruby-mode))
+(unless (package-installed-p 'textile-mode)
+  (package-refresh-contents)
+  (package-install 'textile-mode))
+
 ;; abbrev
 (setq abbrev-file-name "~/.emacs.d/abbrev_defs")
 
