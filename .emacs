@@ -16,14 +16,20 @@
 ;; package
 ;;
 (when (>= emacs-major-version 24)
+  (setq package-list '(auto-complete hungry-delete python-mode web-mode))
   (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/"))
+  (add-to-list 'package-archives
+               '("gnu" . "http://elpa.gnu.org/packages/"))
   (package-initialize)
-  (setq package-archives
-               '(("gnu" . "http://elpa.gnu.org/packages/")
-                 ("marmalade" . "http://marmalade-repo.org/packages/")
-                 ("melpa" . "http://melpa.org/packages/")
-                 )
-               )
+  ;; fetch all the packages
+  (unless package-archive-contents
+    (package-refresh-contents))
+  ;; install the missing packages
+  (dolist (package package-list)
+    (unless (package-installed-p package)
+      (package-install package)))
   )
 
 ;; abbrev
