@@ -15,15 +15,47 @@
 ;; package
 ;;
 (when (>= emacs-major-version 24)
+  (setq package-list '(auto-complete hungry-delete python-mode web-mode))
   (require 'package)
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/"))
+  (add-to-list 'package-archives
+               '("gnu" . "http://elpa.gnu.org/packages/"))
   (package-initialize)
-  (setq package-archives
-               '(("gnu" . "http://elpa.gnu.org/packages/")
-                 ("marmalade" . "http://marmalade-repo.org/packages/")
-                 ("melpa" . "http://melpa.org/packages/")
-                 )
-               )
+  ;; fetch all the packages
+  (unless package-archive-contents
+    (package-refresh-contents))
+  ;; install the missing packages
+  (dolist (package package-list)
+    (unless (package-installed-p package)
+      (package-install package)))
   )
+
+;; install
+(unless (package-installed-p 'hungry-delete)
+  (package-refresh-contents)
+  (package-install 'hungry-delete))
+(unless (package-installed-p 'auto-complete)
+  (package-refresh-contents)
+  (package-install 'auto-complete))
+(unless (package-installed-p 'web-mode)
+  (package-refresh-contents)
+  (package-install 'web-mode))
+(unless (package-installed-p 'python-mode)
+  (package-refresh-contents)
+  (package-install 'python-mode))
+(unless (package-installed-p 'd-mode)
+  (package-refresh-contents)
+  (package-install 'd-mode))
+(unless (package-installed-p 'cl)
+  (package-refresh-contents)
+  (package-install 'cl))
+(unless (package-installed-p 'ruby-mode)
+  (package-refresh-contents)
+  (package-install 'ruby-mode))
+(unless (package-installed-p 'textile-mode)
+  (package-refresh-contents)
+  (package-install 'textile-mode))
 
 ;; abbrev
 (setq abbrev-file-name "~/.emacs.d/abbrev_defs")
