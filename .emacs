@@ -1,5 +1,4 @@
 ;; -*- Mode: Emacs-Lisp -*-
-;; $Id: .emacs 4 2011-05-11 05:20:21Z hurd $
 ;;
 ;; dot emacs for hurd (justhurd@gmail.com)
 ;;
@@ -31,6 +30,12 @@
 
 ;; set my elisp path
 (setq load-path (cons "~/.elisp" load-path))
+
+;; turn off backup~
+(setq make-backup-files nil)
+;; stop creating #autosave# files
+(setq auto-save-default nil)
+
 ;;
 ;; other settings
 ;;
