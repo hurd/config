@@ -7,7 +7,7 @@
 	preloadindex = true
 	fscache = true
 	excludesfiles = /home/hurd/.gitignore_global
-	editor = code --wait
+	editor = vim
 [gc]
 	auto = 256
 [push]

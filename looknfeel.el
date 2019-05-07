@@ -87,4 +87,6 @@
 ;; Theme
 ;;
 (when (>= emacs-major-version 24)
-  (load-theme 'manoj-dark t))
+  (load-theme 'manoj-dark t)
+  ;(load-theme 'atom-dark t)
+  )

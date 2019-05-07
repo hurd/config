@@ -56,6 +56,10 @@
 (unless (package-installed-p 'textile-mode)
   (package-refresh-contents)
   (package-install 'textile-mode))
+(unless (package-installed-p 'js2-mode)
+  (package-install 'js2-mode))
+(unless (package-installed-p 'indium)
+  (package-install 'indium))
 
 ;; abbrev
 (setq abbrev-file-name "~/.emacs.d/abbrev_defs")
@@ -84,7 +88,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (hungry-delete web-mode python-mode auto-complete))))
+ '(package-selected-packages
+   (quote
+    (indium atom-dark-theme js2-mode rust-mode hungry-delete web-mode python-mode auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

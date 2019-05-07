@@ -127,6 +127,15 @@
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 
 ;;
+;; js2-mode
+;;
+(require 'js2-mode)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+;; better imenu
+(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+
+
+;;
 ;; ruby-mode
 ;;
 (add-to-list 'auto-mode-alist
@@ -142,6 +151,12 @@
 ;;
 (require 'textile-mode)
 (add-to-list 'auto-mode-alist '("\\.textile\\'" . textile-mode))
+
+;;
+;; rust-mode
+;;
+(autoload 'rust-mode "rust-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
 ;;
 ;; Auto insert comment
