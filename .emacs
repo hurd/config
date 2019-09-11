@@ -56,10 +56,10 @@
 (unless (package-installed-p 'textile-mode)
   (package-refresh-contents)
   (package-install 'textile-mode))
-(unless (package-installed-p 'js2-mode)
-  (package-install 'js2-mode))
-(unless (package-installed-p 'indium)
-  (package-install 'indium))
+;(unless (package-installed-p 'js2-mode)
+;  (package-install 'js2-mode))
+;(unless (package-installed-p 'indium)
+;  (package-install 'indium))
 
 ;; abbrev
 (setq abbrev-file-name "~/.emacs.d/abbrev_defs")

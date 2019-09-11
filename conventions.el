@@ -129,10 +129,10 @@
 ;;
 ;; js2-mode
 ;;
-(require 'js2-mode)
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+;(require 'js2-mode)
+;(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 ;; better imenu
-(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+;(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
 
 
 ;;

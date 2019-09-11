@@ -14,6 +14,11 @@
 	default = matching
 [color]
 	status = always
+	diff = auto
+	branch = auto
+	interactive = auto
+	ui = true
+	pager = true
 [diff]
 	tool = default-difftool
 [difftool "default-difftool"]
