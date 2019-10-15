@@ -86,7 +86,8 @@
 ;;
 ;; Theme
 ;;
-(when (>= emacs-major-version 24)
-  (load-theme 'manoj-dark t)
-  ;(load-theme 'atom-dark t)
-  )
+(use-package monokai-theme
+ :ensure t
+ :load-path "themes"
+ :init
+ (load-theme 'monokai t))
