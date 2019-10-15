@@ -32,6 +32,12 @@
   )
 
 ;; install
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(unless (package-installed-p 'python-mode)
+  (package-refresh-contents)
+  (Package-install 'python-mode))
 (unless (package-installed-p 'hungry-delete)
   (package-refresh-contents)
   (package-install 'hungry-delete))
@@ -44,22 +50,37 @@
 (unless (package-installed-p 'python-mode)
   (package-refresh-contents)
   (package-install 'python-mode))
-(unless (package-installed-p 'd-mode)
-  (package-refresh-contents)
-  (package-install 'd-mode))
 (unless (package-installed-p 'cl)
   (package-refresh-contents)
   (package-install 'cl))
 (unless (package-installed-p 'ruby-mode)
   (package-refresh-contents)
   (package-install 'ruby-mode))
-(unless (package-installed-p 'textile-mode)
-  (package-refresh-contents)
-  (package-install 'textile-mode))
-;(unless (package-installed-p 'js2-mode)
-;  (package-install 'js2-mode))
-;(unless (package-installed-p 'indium)
-;  (package-install 'indium))
+
+(when window-system
+; VsCode Icons for emacs
+  (use-package vscode-icon
+    :ensure t
+    :commands (vscode-icon-for-file)))
+;
+;  dired-sidebar
+;
+(use-package dired-sidebar
+  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+  :ensure t
+  :commands (dired-sidebar-toggle-sidebar)
+  :init
+  (add-hook 'dired-sidebar-mode-hook
+            (lambda ()
+              (unless (file-remote-p default-directory)
+                (auto-revert-mode))))
+  :config
+  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+  (setq dired-sidebar-subtree-line-prifix "__")
+  ;(setq dired-sidebar-theme 'vscode)
+  (setq dired-sidebar-use-term-integration t)
+  (setq dired-sidebar-use-custom-font t))
 
 ;; abbrev
 (setq abbrev-file-name "~/.emacs.d/abbrev_defs")
@@ -90,7 +111,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (indium atom-dark-theme js2-mode rust-mode hungry-delete web-mode python-mode auto-complete))))
+    (use-package ## indium atom-dark-theme js2-mode rust-mode hungry-delete web-mode python-mode auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
