@@ -57,11 +57,12 @@
   (package-refresh-contents)
   (package-install 'ruby-mode))
 
-(when window-system
+(when (display-graphic-p)
 ; VsCode Icons for emacs
   (use-package vscode-icon
     :ensure t
     :commands (vscode-icon-for-file)))
+
 ;
 ;  dired-sidebar
 ;
@@ -78,9 +79,13 @@
   (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
   (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
   (setq dired-sidebar-subtree-line-prifix "__")
-  ;(setq dired-sidebar-theme 'vscode)
+  (when (display-graphic-p)
+    (setq dired-sidebar-theme 'vscode))
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t))
+
+;;
+;;
 
 ;; abbrev
 (setq abbrev-file-name "~/.emacs.d/abbrev_defs")
@@ -94,6 +99,17 @@
 (setq auto-save-default nil)
 
 ;;
+;; tramp
+;;
+(use-package tramp
+  :defer t
+  :custom
+  (setq tramp-default-method "ssh")
+  :config
+  (setq tramp-persistency-file-name
+        (concat temporary-file-directory "tramp-" (user-login-name))))
+
+;;
 ;; other settings
 ;;
 (load "bindings")
@@ -104,17 +120,3 @@
 (when (eq system-type 'darwin)
   (load "macosx"))
 (load "utils")
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (use-package ## indium atom-dark-theme js2-mode rust-mode hungry-delete web-mode python-mode auto-complete))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

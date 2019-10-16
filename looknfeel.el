@@ -6,7 +6,7 @@
 ;;
 
 ;; frame
-(add-to-list 'default-frame-alist '(width . 80))
+(add-to-list 'default-frame-alist '(width . 120))
 (setq frame-title-format
       (setq icon-title-format
             (list "%b (%p) by "
@@ -17,8 +17,8 @@
 (setq font-lock-maximum-decoration t)
 
 ;; line length is 80 chars
-(setq fill-column 80)
-(setq-default comment-coulumn 80)
+(setq fill-column 120)
+(setq-default comment-coulumn 120)
 
 ;; parentheses highlighting
 (show-paren-mode 1)
@@ -45,13 +45,13 @@
 (setq inhibit-startup-message t)
 
 ;; GUI environment
-(when window-system
+(when (display-graphic-p)
   ;; fontset
   (load "fonts")
   ;; mouse wheel
   (mwheel-install)
   ;; frame height
-  (add-to-list 'default-frame-alist '(height . 40))
+  (add-to-list 'default-frame-alist '(height . 60))
   ;; turn off scroll bar
   (scroll-bar-mode -1)
   ;; turn off menu bar
@@ -70,7 +70,7 @@
   (tool-bar-mode 0))
 
 ;; enable mouse reporting for terminal emulators
-(unless window-system
+(unless (display-graphic-p)
   (require 'mouse)
   (xterm-mouse-mode t)
   (global-set-key [mouse-4] (lambda ()

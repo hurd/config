@@ -12,20 +12,20 @@
   (prefer-coding-system 'utf-8)
   (set-default-coding-systems 'utf-8)
 
-  (when window-system 
+  (when (display-graphic-p)
     (global-set-key "\C-\\" 'undefined))
   (add-hook 'quail-inactivate-hook 'delete-quail-completions)
   (defun delete-quail-completions ()
     (when (get-buffer "*Quail Completions*")
       (kill-buffer "*Quail Completions*")))
-  
-  (unless window-system
+
+  (unless (display-graphic-p)
     (set-keyboard-coding-system 'utf-8)
     (set-terminal-coding-system 'utf-8))
-  
+
   ;; Hangul Mail setting
   (setq-default sendmail-coding-system 'utf-8)
-  
+
   ;; turn off C-h during input
   (eval-after-load "quail"
     '(progn
@@ -35,7 +35,7 @@
   (define-key global-map (kbd "C-x RET s") 'decode-coding-region))
 
 ;; copy & paste
-(set-selection-coding-system 
+(set-selection-coding-system
  (cond ((eq system-type 'windows-nt) 'euc-kr-dos)
        (t 'utf-8)))
 

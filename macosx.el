@@ -4,12 +4,12 @@
 ;; Carbon Emacs
 ;;
 
-(when (eq window-system 'mac)
+(when (display-graphic-p)
   ;; font
-  (require 'carbon-font)
+  ;;(require 'carbon-font)
   ;; transparency
   (setq frame-alpha-lower-limit 20)
-  (set-frame-parameter nil 'alpha '(75 75))
+  (set-frame-parameter nil 'alpha '(95 95))
   ;; M-Space ==> just one space
   (global-set-key "\M- " 'just-one-space)
   ;(setq mac-command-key-is-meta nil)
@@ -21,8 +21,8 @@
   (define-key global-map [home] 'beginning-of-buffer)
   (define-key global-map [end] 'end-of-buffer)
   ;; mac-key-mode
-  (require 'mac-key-mode)
-  (mac-key-mode 1)
+  ;(require 'mac-key-mode)
+  ;(mac-key-mode 1)
   ;; anti alias
   (setq mac-allow-anti-aliasing t)
 )
