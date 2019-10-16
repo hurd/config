@@ -103,8 +103,6 @@
 ;;
 (use-package tramp
   :defer t
-  :custom
-  (setq tramp-default-method "ssh")
   :config
   (setq tramp-persistency-file-name
         (concat temporary-file-directory "tramp-" (user-login-name))))
