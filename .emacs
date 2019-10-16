@@ -35,6 +35,9 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+(unless (package-installed-p 'ibuffer-sidebar)
+  (package-refresh-contents)
+  (package-install 'ibuffer-sidebar))
 (unless (package-installed-p 'python-mode)
   (package-refresh-contents)
   (Package-install 'python-mode))
@@ -63,11 +66,20 @@
     :ensure t
     :commands (vscode-icon-for-file)))
 
-;
-;  dired-sidebar
-;
+;; ibuffer-sidebar
+(use-package ibuffer-sidebar
+  :ensure t
+  :commands (ibuffer-sidebar-toggle-sidebar))
+
+(defun sidebar-toggle()
+  "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
+  (interactive)
+  (dired-sidebar-toggle-sidebar)
+  (ibuffer-sidebar-toggle-sidebar))
+
+;;  dired-sidebar
 (use-package dired-sidebar
-  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+  :bind (("C-x C-n" . sidebar-toggle))
   :ensure t
   :commands (dired-sidebar-toggle-sidebar)
   :init
@@ -98,9 +110,7 @@
 ;; stop creating #autosave# files
 (setq auto-save-default nil)
 
-;;
 ;; tramp
-;;
 (use-package tramp
   :defer t
   :config
@@ -118,3 +128,21 @@
 (when (eq system-type 'darwin)
   (load "macosx"))
 (load "utils")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(display-time-mode t)
+ '(package-selected-packages
+   (quote
+    (ibuffer-sidebar monokai-theme web-mode vscode-icon use-package python-mode hungry-delete dired-sidebar auto-complete)))
+ '(show-paren-mode t)
+ '(tool-bar-mode nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
