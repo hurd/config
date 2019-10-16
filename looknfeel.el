@@ -69,6 +69,10 @@
   ;; turn off toolbar
   (tool-bar-mode 0))
 
+;; 2.6
+(when (version<= "26.0.50" emacs-version)
+  (global-display-line-numbers-mode))
+
 ;; enable mouse reporting for terminal emulators
 (unless (display-graphic-p)
   (require 'mouse)
