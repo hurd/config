@@ -66,10 +66,24 @@
   (auto-image-file-mode t)
   ;; turn off/on cursor blinking
   (blink-cursor-mode t)
+  ;; desktop
+  (use-package desktop
+    :ensure t
+    :init
+    (desktop-save-mode 1))
+  ;; windmove
+  (use-package windmove
+    :config
+    ;; use shift + arrow keys
+    (windmove-default-keybindings))
+  ;; VsCode Icons for emacs
+  (use-package vscode-icon
+    :ensure t
+    :commands (vscode-icon-for-file))
   ;; turn off toolbar
   (tool-bar-mode 0))
 
-;; 2.6
+;; 2.6 line numbers mode
 (when (version<= "26.0.50" emacs-version)
   (global-display-line-numbers-mode))
 
@@ -85,13 +99,42 @@
                               (scroll-up 1)))
   (defun track-mouse (e))
   (setq mouse-sel-mode t)
-)
+  )
+
+;; 3ibuffer-sidebar
+(use-package ibuffer-sidebar
+  :ensure t
+  :commands (ibuffer-sidebar-toggle-sidebar))
+
+(defun sidebar-toggle()
+  "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
+  (interactive)
+  (dired-sidebar-toggle-sidebar)
+  (ibuffer-sidebar-toggle-sidebar))
+
+;;  dired-sidebar
+(use-package dired-sidebar
+  :bind (("C-x C-n" . sidebar-toggle))
+  :ensure t
+  :commands (dired-sidebar-toggle-sidebar)
+  :init
+  (add-hook 'dired-sidebar-mode-hook
+            (lambda ()
+              (unless (file-remote-p default-directory)
+                (auto-revert-mode))))
+  :config
+  (push 'toggle-window-split dired-sidebar-toggle-hidden-commands)
+  (push 'rotate-windows dired-sidebar-toggle-hidden-commands)
+  (setq dired-sidebar-subtree-line-prifix "__")
+  (when (display-graphic-p)
+    (setq dired-sidebar-theme 'vscode))
+  (setq dired-sidebar-use-term-integration t)
+  (setq dired-sidebar-use-custom-font t))
 
 ;;
 ;; Theme
 ;;
 (use-package monokai-theme
  :ensure t
- :load-path "themes"
- :init
+ :config
  (load-theme 'monokai t))

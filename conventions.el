@@ -21,6 +21,15 @@
 ;(require 'hungry-delete)
 ;(global-hungry-delete-mode)
 
+;; smart-hungry-delete
+(use-package smart-hungry-delete
+  :ensure t
+  :bind (("<backspace>" . smart-hungry-delete-backward-char)
+         ("C-d" . smart-hungry-delete-forward-char))
+  :defer nil ;; dont defer so we can add our functions to hooks
+  :config
+  (smart-hungry-delete-add-default-hooks))
+
 (add-hook 'prog-mode-hook
           '(lambda()
              (setq subword-mode t)
@@ -30,19 +39,55 @@
                        'delete-trailing-whitespace nil t)
              (when (featurep 'dtrt-indent)
                (dtrt-indent-mode t))))
+;; isearch
+(use-package isearch
+  :bind (:map isearch-mode-map
+              ("C-<return>" . isearch-done-opposite)
+              ("M-i" . helm-swoop-from-isearch))
+  :init (defun isearch-done-opposite (&optional nopush edit)
+          "End current search in the opposite side of the match."
+          (interactive)
+          (funcall #'isearch-done nopush edit)
+          (when isearch-other-end (goto-char isearch-other-end))))
 
-;;
 ;; Interactively Do Things (ido-mode)
-;;
-(require 'ido)
-(ido-mode t)
+(use-package ido
+  :ensure t
+  :init (ido-mode t))
 
 ;;
 ;; auto-complete (http://auto-complete.org)
 ;;
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.elisp/ac-dict")
-(ac-config-default)
+;;(require 'auto-complete-config)
+;;(add-to-list 'ac-dictionary-directories "~/.elisp/ac-dict")
+;;(ac-config-default)
+
+(use-package flycheck
+  :ensure t
+  :if (display-graphic-p)
+  :hook ((c++-mode typescript-mode racer-mode) . flycheck-mode))
+
+(use-package flycheck-rust
+  :ensure t
+  :hook (flycheck-mode . flycheck-rust-setup))
+
+(use-package rust-mode
+  :ensure t
+  :config (setq rust-format-on-save t
+                rust-match-angle-brackets nil))
+;; company mode
+(use-package company
+  :ensure t
+  :config
+  (setq company-idle-delay 0.5)
+  (setq company-show-numbers t)
+  (setq company-tooltip-limit 10)
+  (setq company-minimum-prefix-length 2)
+  (setq company-tooltip-align-annotations t)
+  ;; invert the navigation direction if the the completion popup-isearch-match
+  ;; is displayed on top (happens near the bottom of windows)
+  (setq company-tooltip-flip-when-above t)
+  (global-company-mode))
 
 ;;
 ;; C/C++ style
@@ -69,33 +114,43 @@
 ;(setq compile-command "gmake -f Makefile")
 (add-to-list 'auto-mode-alist '("\\.mq4\\'" . c++-mode))
 
-;;
-;; php-mode. http://www.ontosys.com/reports/PHP.html
-;;
-;(autoload 'php-mode "php-mode" "PHP editing mode" t)
-;(add-to-list 'auto-mode-alist '("\\.html$" . php-mode))
-;(add-to-list 'auto-mode-alist '("\\.shtml$" . php-mode))
-;(add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
-;(add-to-list 'auto-mode-alist '("\\.php3$" . php-mode))
-;(add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
-
-;;
 ;; web-mode (http://web-mode.org)
-;;
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustanche\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.dhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(use-package web-mode
+  :ensure t
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.phtml\\'" . web-mode)
+         ("\\.tpl\\'" . web-mode)
+         ("\\.php\\'" . web-mode)
+         ("\\.[agj]sp\\'" . web-mode)
+         ("\\.as[cp]x\\'" . web-mode)
+         ("\\.erb\\'" . web-mode)
+         ("\\.mustache\\'" . web-mode)
+         ("\\.dhtml\\'" . web-mode)
+         ("\\.tsx\\'" . web-mode))
+  :config
+  (flycheck-add-mode 'typescript-tslint 'web-mode)
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-block-padding 2
+        web-mode-comment-style 2
 
-;;
+        web-mode-enable-css-colorization t
+        web-mode-enable-auto-pairing t
+        web-mode-enable-comment-keywords t
+        web-mode-enable-current-element-highlight nil
+        )
+  (add-hook 'web-mode-hook
+            (defun setup/tsx ()
+              (setq flycheck-checker 'tsx-tide)
+              (when (string-equal "tsx" (file-name-extension buffer-file-name))
+                (tide-setup)
+                (tide-hl-identifier-mode)
+                (eldoc-mode)
+                (flycheck-mode)
+                (add-hook 'before-save-hook 'tide-format-before-save)))))
+
 ;; python-mode
-;;
 (setq py-install-directory "~/.elisp/python-mode")
 (add-to-list 'load-path py-install-directory)
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
@@ -106,34 +161,16 @@
 (add-hook 'python-mode-hook
           (lambda () (define-key python-mode-map (kbd "DEL") 'py-electric-backspace)))
 
-;;
-;; d-mode
-;;
-(autoload 'd-mode "d-mode" () t)
-(add-to-list 'auto-mode-alist '("\\.d\\'" . d-mode))
-(add-hook 'd-mode-hook 'imenu-add-menubar-index)
-(add-hook 'd-mode-hook 'font-lock-mode)
-
-;;
-;; vc-svn mode for SVN
-;;
-(require 'cl)
-(load-library "vc-svn")
+;; magit
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)))
 
 ;;
 ;; css-mode
 ;;
 (autoload 'css-mode "css-mode" "Mode for editing CSS files" t)
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
-
-;;
-;; js2-mode
-;;
-;(require 'js2-mode)
-;(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-;; better imenu
-;(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
-
 
 ;;
 ;; ruby-mode
@@ -144,19 +181,6 @@
 (add-to-list 'auto-mode-alist
              '("\\(Capfile\\|Gemfile\\(?:\\.[a-zA-Z0-9._-]+\\)?\\|[rR]akefile\\)\\'"
                . ruby-mode))
-
-;;
-;; textile mode
-;; https://github.com/juba/textile-mode
-;;
-(require 'textile-mode)
-(add-to-list 'auto-mode-alist '("\\.textile\\'" . textile-mode))
-
-;;
-;; rust-mode
-;;
-(autoload 'rust-mode "rust-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
 ;;
 ;; Auto insert comment
