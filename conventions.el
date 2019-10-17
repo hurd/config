@@ -8,7 +8,7 @@
 (setq default-major-mode 'text-mode)
 ;; turn on auto fill mode automatically in text mode
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
-;; default tabs mode to nil
+;; default tabs mode to nil ==> use space
 (setq-default indent-tabs-mode nil)
 ;; UNIX mode for EOL char
 (setq inhibit-eol-conversion t)
@@ -17,9 +17,17 @@
 ;; emacs24 stuff
 (when (>= emacs-major-version 24)
   (setq delete-active-region nil))
-;; hungry-delete
-;(require 'hungry-delete)
-;(global-hungry-delete-mode)
+
+;; smartparens
+(use-package smartparens
+  :hook
+  (after-init . smartparens-global-mode)
+  :config
+  (require 'smartparens-config)
+  (sp-pair "=" "=" :actions '(wrap))
+  (sp-pair "+" "+" :actions '(wrap))
+  (sp-pair "<" ">" :actions '(wrap))
+  (sp-pair "$" "$" :actions '(wrap)))
 
 ;; smart-hungry-delete
 (use-package smart-hungry-delete
@@ -39,38 +47,24 @@
                        'delete-trailing-whitespace nil t)
              (when (featurep 'dtrt-indent)
                (dtrt-indent-mode t))))
-;; isearch
-(use-package isearch
-  :bind (:map isearch-mode-map
-              ("C-<return>" . isearch-done-opposite)
-              ("M-i" . helm-swoop-from-isearch))
-  :init (defun isearch-done-opposite (&optional nopush edit)
-          "End current search in the opposite side of the match."
-          (interactive)
-          (funcall #'isearch-done nopush edit)
-          (when isearch-other-end (goto-char isearch-other-end))))
 
 ;; Interactively Do Things (ido-mode)
 (use-package ido
   :ensure t
   :init (ido-mode t))
 
-;;
-;; auto-complete (http://auto-complete.org)
-;;
-;;(require 'auto-complete-config)
-;;(add-to-list 'ac-dictionary-directories "~/.elisp/ac-dict")
-;;(ac-config-default)
-
+;; flycheck
 (use-package flycheck
   :ensure t
   :if (display-graphic-p)
   :hook ((c++-mode typescript-mode racer-mode) . flycheck-mode))
 
+;; flycheck-rust
 (use-package flycheck-rust
   :ensure t
   :hook (flycheck-mode . flycheck-rust-setup))
 
+;; rust-mode
 (use-package rust-mode
   :ensure t
   :config (setq rust-format-on-save t
@@ -78,6 +72,7 @@
 ;; company mode
 (use-package company
   :ensure t
+  :diminish company-mode
   :config
   (setq company-idle-delay 0.5)
   (setq company-show-numbers t)
@@ -88,6 +83,16 @@
   ;; is displayed on top (happens near the bottom of windows)
   (setq company-tooltip-flip-when-above t)
   (global-company-mode))
+
+;; conda
+(add-to-list 'exec-path "~/miniconda3/bin")
+(setenv "PATH" "~/miniconda3/bin:$PATH" '("PATH"))
+(use-package conda
+  :ensure t
+  :init
+  (setq conda-env-autoactivate-mode t)
+  (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
+  (setq conda-env-home-directory (expand-file-name "~/miniconda3")))
 
 ;;
 ;; C/C++ style
@@ -160,6 +165,21 @@
 ;; fix backspace problem
 (add-hook 'python-mode-hook
           (lambda () (define-key python-mode-map (kbd "DEL") 'py-electric-backspace)))
+
+;; golang
+(use-package go-mode
+  :mode "\\.go\\'"
+  :custom (gofmt-command "goimports")
+  :bind (:map go-mode-map
+         ("C-c C-n" . go-run)
+         ("C-c ."   . go-test-current-test)
+         ("C-c f"   . go-test-current-file)
+         ("C-c a"   . go-test-current-project))
+  :config
+  (add-hook 'before-save-hook #'gofmt-before-save)
+  (use-package gotest)
+  (use-package go-tag
+    :config (setq go-tag-args (list "-transform" "camelcase"))))
 
 ;; magit
 (use-package magit

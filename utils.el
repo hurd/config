@@ -32,3 +32,12 @@
 (global-set-key (kbd "C-c c") 'pbcopy)
 (global-set-key (kbd "C-c v") 'pbpaste)
 (global-set-key (kbd "C-c x") 'pbcut)
+
+;; google translater
+(use-package google-translate
+  :bind
+  ("M-o t" . google-translate-at-point)
+  ("M-o T" . google-translate-at-point-reverse)
+  :custom
+  (google-translate-default-source-language "ko")
+  (google-translate-default-target-language "en"))

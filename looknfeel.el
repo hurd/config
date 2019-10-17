@@ -8,9 +8,8 @@
 ;; frame
 (add-to-list 'default-frame-alist '(width . 120))
 (setq frame-title-format
-      (setq icon-title-format
-            (list "%b (%p) by "
-                  (getenv "USERNAME"))))
+      '(buffer-file-name "%f"
+                         (dired-directory dired-directory "%b")))
 
 ;; enablling font-lock globally
 (global-font-lock-mode t)
@@ -80,8 +79,41 @@
   (use-package vscode-icon
     :ensure t
     :commands (vscode-icon-for-file))
+  ;; all-the-icons
+  (use-package all-the-icons)
+  ;; posframe
+  (use-package posframe)
+  ;; hyrdra
+  (use-package hydra
+    :config
+    (use-package hydra-posframe
+      :load-path "~/.emacs.d/hydra-posframe"
+      :custom
+      (hydra-posframe-parameters
+       '((left-fringe . 5)
+         (right-fringe . 5)))
+      :custom-face
+      (hydra-posframe-border-face ((t (:background "#6272a4"))))
+      :hook (after-init . hydra-posframe-enable)))
   ;; turn off toolbar
   (tool-bar-mode 0))
+
+;; dimmer
+(use-package dimmer
+  :disabled
+  :custom
+  (dimmer-fraction 0.5)
+  (dimmer-exclusion-regexp-list
+       '(".*Minibuf.*"
+         ".*which-key.*"
+         ".*NeoTree.*"
+         ".*Messages.*"
+         ".*Async.*"
+         ".*Warnings.*"
+         ".*LV.*"
+         ".*Ilist.*"))
+  :config
+  (dimmer-mode t))
 
 ;; 2.6 line numbers mode
 (when (version<= "26.0.50" emacs-version)
@@ -130,6 +162,39 @@
     (setq dired-sidebar-theme 'vscode))
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t))
+
+;; which-key
+(use-package which-key
+  :diminish which-key-mode
+  :hook (after-init . which-key-mode))
+
+;; highlight line
+(use-package hl-line
+  :ensure nil
+  :hook
+  (after-init . global-hl-line-mode))
+
+;; paren
+(use-package paren
+  :ensure nil
+  :hook
+  (after-init . show-paren-mode)
+  :custom-face
+  (show-paren-match ((nil (:background "#44475a" :foreground "#f1fa8c")))) ;; :box t
+  :custom
+  (show-paren-style 'mixed)
+  (show-paren-when-point-inside-paren t)
+  (show-paren-when-point-in-periphery t))
+
+;; rainbow delimiters
+(use-package rainbow-delimiters
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
+
+;; rainbow mode
+(use-package rainbow-mode
+  :diminish
+  :hook (emacs-lisp-mode . rainbow-mode))
 
 ;;
 ;; Theme
