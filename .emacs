@@ -31,6 +31,7 @@
     (package-install 'web-mode)
     (package-install 'cl)
     (package-install 'ruby-mode)
+    (package-install 'flycheck)
     (package-install 'bind-key))
 
   (setq use-package-always-ensure t)

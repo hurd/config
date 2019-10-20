@@ -84,17 +84,17 @@
   ;; posframe
   (use-package posframe)
   ;; hyrdra
-  (use-package hydra
-    :config
-    (use-package hydra-posframe
-      :load-path "~/.emacs.d/hydra-posframe"
-      :custom
-      (hydra-posframe-parameters
-       '((left-fringe . 5)
-         (right-fringe . 5)))
-      :custom-face
-      (hydra-posframe-border-face ((t (:background "#6272a4"))))
-      :hook (after-init . hydra-posframe-enable)))
+  ;(use-package hydra
+  ;  :config
+  ;  (use-package hydra-posframe
+  ;    :load-path "~/.emacs.d/hydra-posframe"
+  ;    :custom
+  ;    (hydra-posframe-parameters
+  ;     '((left-fringe . 5)
+  ;       (right-fringe . 5)))
+  ;    :custom-face
+  ;    (hydra-posframe-border-face ((t (:background "#6272a4"))))
+  ;    :hook (after-init . hydra-posframe-enable)))
   ;; turn off toolbar
   (tool-bar-mode 0))
 

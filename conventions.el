@@ -29,6 +29,12 @@
   (sp-pair "<" ">" :actions '(wrap))
   (sp-pair "$" "$" :actions '(wrap)))
 
+;; fix trailing spaces
+(use-package ws-butler
+  :defer
+  :init
+  (add-hook 'prog-mode-hook #'ws-butler-mode))
+
 ;; smart-hungry-delete
 (use-package smart-hungry-delete
   :ensure t
@@ -48,27 +54,22 @@
              (when (featurep 'dtrt-indent)
                (dtrt-indent-mode t))))
 
+;; virtual environment
+(add-to-list 'exec-path "~/miniconda3/bin")
+(add-to-list 'exec-path "~/.cargo/bin")
+(setenv "PATH" "~/miniconda3/bin:~/.cargo/bin:$PATH" '("PATH"))
+(use-package conda
+  :ensure t
+  :init
+  (setq conda-env-autoactivate-mode t)
+  (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
+  (setq conda-env-home-directory (expand-file-name "~/miniconda3")))
+
 ;; Interactively Do Things (ido-mode)
 (use-package ido
   :ensure t
   :init (ido-mode t))
 
-;; flycheck
-(use-package flycheck
-  :ensure t
-  :if (display-graphic-p)
-  :hook ((c++-mode typescript-mode racer-mode) . flycheck-mode))
-
-;; flycheck-rust
-(use-package flycheck-rust
-  :ensure t
-  :hook (flycheck-mode . flycheck-rust-setup))
-
-;; rust-mode
-(use-package rust-mode
-  :ensure t
-  :config (setq rust-format-on-save t
-                rust-match-angle-brackets nil))
 ;; company mode
 (use-package company
   :ensure t
@@ -84,15 +85,67 @@
   (setq company-tooltip-flip-when-above t)
   (global-company-mode))
 
-;; conda
-(add-to-list 'exec-path "~/miniconda3/bin")
-(setenv "PATH" "~/miniconda3/bin:$PATH" '("PATH"))
-(use-package conda
+;; flycheck
+(use-package flycheck
+  :ensure t
+  :if (display-graphic-p)
+  :hook ((c++-mode typescript-mode racer-mode) . flycheck-mode))
+
+;; flycheck-rust
+(use-package flycheck-rust
+  :ensure t
+  :hook (flycheck-mode . flycheck-rust-setup))
+
+;; cargo
+(use-package cargo
+  :defer)
+
+;; racer
+(use-package racer
+  :defer)
+
+;; rust-mode
+(use-package rust-mode
   :ensure t
   :init
-  (setq conda-env-autoactivate-mode t)
-  (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
-  (setq conda-env-home-directory (expand-file-name "~/miniconda3")))
+  (setq company-tooltip-align-annotations t
+        rust-format-on-save t
+        rust-match-angle-brackets nil)
+  :config
+  (add-hook 'rust-mode-hook #'company-mode)
+  (add-hook 'rust-mode-hook #'cargo-minor-mode)
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  :bind
+  (:map rust-mode-map
+        ("C-i" . company-indent-or-complete-common)))
+;; 참고: https://emacs.stackexchange.com/questions/51156/cargo-process-does-not-accept-user-input/51194#51194
+(with-eval-after-load 'rust-mode
+  (define-key rust-mode-map (kbd "C-r") 'my-cargo-run))
+(defun my-cargo-run ()
+  "Build and run Rust code."
+  (interactive)
+  (cargo-process-run)
+  (let (
+      (orig-win (selected-window))
+      (run-win (display-buffer (get-buffer "*Cargo Run*") nil 'visible))
+    )
+    (select-window run-win)
+    (comint-mode)
+    (read-only-mode 0)
+    (select-window orig-win)
+  )
+)
+
+;; markdown
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init
+  (setq markdown-command "multimarkdown"))
 
 ;;
 ;; C/C++ style
@@ -133,10 +186,10 @@
          ("\\.dhtml\\'" . web-mode)
          ("\\.tsx\\'" . web-mode))
   :config
-  (setq web-mode-markup-indent-offset 2
-        web-mode-css-indent-offset 2
-        web-mode-code-indent-offset 2
-        web-mode-block-padding 2
+  (setq web-mode-markup-indent-offset 4
+        web-mode-css-indent-offset 4
+        web-mode-code-indent-offset 4
+        web-mode-block-padding 4
         web-mode-comment-style 2
         web-mode-enable-css-colorization t
         web-mode-enable-auto-pairing t
@@ -144,16 +197,23 @@
         web-mode-enable-current-element-highlight nil
         ))
 
-;; python-mode
+;; for python
+(use-package company-jedi
+  :defer)
+
 (setq py-install-directory "~/.elisp/python-mode")
 (add-to-list 'load-path py-install-directory)
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (setq interpreter-mode-alist (cons'("python" . python-mode)
-        interpreter-mode-alist))
-(autoload 'python-mode "python-mode" "Python editing mode." t)
-;; fix backspace problem
-(add-hook 'python-mode-hook
-          (lambda () (define-key python-mode-map (kbd "DEL") 'py-electric-backspace)))
+                                  interpreter-mode-alist))
+(defun my-python-mode-hook-fn ()
+  (set (make-local-variable 'company-backends) '(company-jedi))
+  (company-mode)
+  (smartparens-mode 1)
+  (local-set-key (kbd "M-.") #'jedi:goto-definition)
+  (local-set-key (kbd "M-,") #'jedi:goto-definition-pop-marker)
+  (local-set-key "\C-i" #'company-indent-or-complete-common))
+(add-hook 'python-mode-hook #'my-python-mode-hook-fn)
 
 ;; golang
 (use-package go-mode
