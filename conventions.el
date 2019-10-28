@@ -70,6 +70,10 @@
 ;;
 (setq my:el-get-packages
       '(company-mode
+        yasnippet
+        js2-mode
+        js2-refactor
+        xref-js2
         flycheck))
 
 (el-get-bundle elpa:jedi-core)
@@ -124,6 +128,24 @@
   :ensure t
   :if (display-graphic-p)
   :hook ((c++-mode typescript-mode racer-mode) . flycheck-mode))
+
+;;
+;; js2-mode
+;;
+(require 'yasnippet)
+(require 'js2-mode)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+(require 'js2-refactor)
+(require 'xref-js2)
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+(js2r-add-keybindings-with-prefix "C-c C-r")
+(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
+;; js-mode (which js2 is based on) binds "M-." which conflicts with xref, so
+;; unbind it.
+(define-key js-mode-map (kbd "M-.") nil)
+(add-hook 'js2-mode-hook (lambda ()
+                           (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
 ;; flycheck-rust
 (use-package flycheck-rust
@@ -225,35 +247,6 @@
         web-mode-enable-comment-keywords t
         web-mode-enable-current-element-highlight nil
         ))
-
-;; jedi
-(use-package jedi
-  :ensure t
-  :init
-  (add-hook 'python-mode-hook 'jedi:setup)
-  (add-hook 'python-mode-hook 'jedi:ac-setup)
-  :config
-  (progn
-    (setq jedi:server-args
-          '("--sys-path" "/Users/hurd/miniconda3/envs/webdev/lib/python3.6/site-packages"
-            )
-          )
-    ))
-
-(use-package company-jedi
-  :defer)
-
-(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
-(setq interpreter-mode-alist (cons'("python" . python-mode)
-                                  interpreter-mode-alist))
-(defun my-python-mode-hook-fn ()
-  (set (make-local-variable 'company-backends) '(company-jedi))
-  (company-mode)
-  (smartparens-mode 1)
-  (local-set-key (kbd "M-.") #'jedi:goto-definition)
-  (local-set-key (kbd "M-,") #'jedi:goto-definition-pop-marker)
-  (local-set-key "\C-i" #'company-indent-or-complete-common))
-(add-hook 'python-mode-hook #'my-python-mode-hook-fn)
 
 ;; golang
 (use-package go-mode
