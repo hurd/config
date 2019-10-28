@@ -7,6 +7,19 @@
 ;;(setq max-specpdl-size 32000)
 (setq debug-on-error t)
 
+;; el-get
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(el-get 'sync)
+
 ;; package
 (require 'package)
 (setq package-archives '(
@@ -23,6 +36,7 @@
 (eval-when-compile
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
+    (package-install 'el-get)
     (package-install 'use-package)
     (package-install 'diminish)
     (package-install 'ibuffer-sidebar)

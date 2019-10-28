@@ -17,7 +17,7 @@
 ;; emacs24 stuff
 (when (>= emacs-major-version 24)
   (setq delete-active-region nil))
-
+;;(add-to-list 'warning-suppress-types '(undo discard-info))
 ;; smartparens
 (use-package smartparens
   :hook
@@ -54,7 +54,31 @@
              (when (featurep 'dtrt-indent)
                (dtrt-indent-mode t))))
 
-;; virtual environment
+;; Interactively Do Things (ido-mode)
+(use-package ido
+  :ensure t
+  :init (ido-mode t))
+
+;;
+;; virtual environment: conda
+;;
+;; 1) conda create -n webdev python
+;; 2) pip install sexpdata epc
+;; 3) conda install jedi
+;; 4) cd ~/.emacs.d/el-get/jedi-core && python setup.py install
+;; 5) conda activate base && pip install flake8 pylint
+;;
+(setq my:el-get-packages
+      '(company-mode
+        flycheck))
+
+(el-get-bundle elpa:jedi-core)
+(el-get-bundle company-jedi :depends (company-mode))
+(eval-after-load "company-jedi"
+    '(setq jedi:server-command (list "~/miniconda3/envs/webdev/bin/python" jedi:server-script)))
+(require 'company-jedi)
+(el-get 'sync my:el-get-packages)
+
 (add-to-list 'exec-path "~/miniconda3/bin")
 (add-to-list 'exec-path "~/.cargo/bin")
 (setenv "PATH" "~/miniconda3/bin:~/.cargo/bin:$PATH" '("PATH"))
@@ -65,12 +89,22 @@
   (setq conda-anaconda-home (expand-file-name "~/miniconda3"))
   (setq conda-env-home-directory (expand-file-name "~/miniconda3")))
 
-;; Interactively Do Things (ido-mode)
-(use-package ido
-  :ensure t
-  :init (ido-mode t))
+(add-hook 'conda-postactivate-hook 'jedi:stop-server)
+(add-hook 'conda-postdeactivate-hook 'jedi:stop-server)
 
-;; company mode
+(defun my/python-mode-hook ()
+  (add-to-list 'company-backends 'company-jedi))
+
+(add-hook 'python-mode-hook 'my/python-mode-hook)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+(add-hook 'after-init-hook #'global-flycheck-mode)
+(setq-default flycheck-emacs-lisp-load-path 'inherit)
+(setq flycheck-flake8-maximum-line-length 99)
+(setq flycheck-python-pylint-executable "~/miniconda3/bin/pylint")
+(setq flycheck-python-flake8-executable "~/miniconda3/bin/flake8")
+
 (use-package company
   :ensure t
   :diminish company-mode
@@ -186,23 +220,29 @@
          ("\\.dhtml\\'" . web-mode)
          ("\\.tsx\\'" . web-mode))
   :config
-  (setq web-mode-markup-indent-offset 4
-        web-mode-css-indent-offset 4
-        web-mode-code-indent-offset 4
-        web-mode-block-padding 4
-        web-mode-comment-style 2
-        web-mode-enable-css-colorization t
+  (setq web-mode-enable-css-colorization t
         web-mode-enable-auto-pairing t
         web-mode-enable-comment-keywords t
         web-mode-enable-current-element-highlight nil
         ))
 
-;; for python
+;; jedi
+(use-package jedi
+  :ensure t
+  :init
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (add-hook 'python-mode-hook 'jedi:ac-setup)
+  :config
+  (progn
+    (setq jedi:server-args
+          '("--sys-path" "/Users/hurd/miniconda3/envs/webdev/lib/python3.6/site-packages"
+            )
+          )
+    ))
+
 (use-package company-jedi
   :defer)
 
-(setq py-install-directory "~/.elisp/python-mode")
-(add-to-list 'load-path py-install-directory)
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (setq interpreter-mode-alist (cons'("python" . python-mode)
                                   interpreter-mode-alist))
