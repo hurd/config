@@ -7,7 +7,10 @@
 ;;(setq max-specpdl-size 32000)
 (setq debug-on-error t)
 
+;;
 ;; el-get
+;; cd ~/.emacs.d && git clone https://github.com/dimitri/el-get.git
+;;
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
 (unless (require 'el-get nil 'noerror)
