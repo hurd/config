@@ -19,15 +19,15 @@
   (setq delete-active-region nil))
 ;;(add-to-list 'warning-suppress-types '(undo discard-info))
 ;; smartparens
-(use-package smartparens
-  :hook
-  (after-init . smartparens-global-mode)
-  :config
-  (require 'smartparens-config)
-  (sp-pair "=" "=" :actions '(wrap))
-  (sp-pair "+" "+" :actions '(wrap))
-  (sp-pair "<" ">" :actions '(wrap))
-  (sp-pair "$" "$" :actions '(wrap)))
+;(use-package smartparens
+;  :hook
+;  (after-init . smartparens-global-mode)
+;  :config
+;  (require 'smartparens-config)
+;  (sp-pair "=" "=" :actions '(wrap))
+;  (sp-pair "+" "+" :actions '(wrap))
+;  (sp-pair "<" ">" :actions '(wrap))
+;  (sp-pair "$" "$" :actions '(wrap)))
 
 ;; fix trailing spaces
 (use-package ws-butler
