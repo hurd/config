@@ -38,6 +38,3 @@
 (set-selection-coding-system
  (cond ((eq system-type 'windows-nt) 'euc-kr-dos)
        (t 'utf-8)))
-
-;; use shift-space
-(global-set-key [?\S- ] 'toggle-input-method)

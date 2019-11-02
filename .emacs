@@ -105,7 +105,7 @@
 (load "datetime")
 (load "looknfeel")
 (load "conventions")
-(load "korean")
+;(load "korean")
 (when (eq system-type 'darwin)
   (load "macosx"))
 (load "utils")

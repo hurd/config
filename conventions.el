@@ -109,25 +109,25 @@
 (setq flycheck-python-pylint-executable "~/miniconda3/bin/pylint")
 (setq flycheck-python-flake8-executable "~/miniconda3/bin/flake8")
 
-(use-package company
-  :ensure t
-  :diminish company-mode
-  :config
-  (setq company-idle-delay 0.5)
-  (setq company-show-numbers t)
-  (setq company-tooltip-limit 10)
-  (setq company-minimum-prefix-length 2)
-  (setq company-tooltip-align-annotations t)
-  ;; invert the navigation direction if the the completion popup-isearch-match
-  ;; is displayed on top (happens near the bottom of windows)
-  (setq company-tooltip-flip-when-above t)
-  (global-company-mode))
+;; (use-package company
+;;   :ensure t
+;;   :diminish company-mode
+;;   :config
+;;   (setq company-idle-delay 0.5)
+;;   (setq company-show-numbers t)
+;;   (setq company-tooltip-limit 10)
+;;   (setq company-minimum-prefix-length 2)
+;;   (setq company-tooltip-align-annotations t)
+;;   ;; invert the navigation direction if the the completion popup-isearch-match
+;;   ;; is displayed on top (happens near the bottom of windows)
+;;   (setq company-tooltip-flip-when-above t)
+;;   (global-company-mode))
 
 ;; flycheck
-(use-package flycheck
-  :ensure t
-  :if (display-graphic-p)
-  :hook ((c++-mode typescript-mode racer-mode) . flycheck-mode))
+;; (use-package flycheck
+;;   :ensure t
+;;   :if (display-graphic-p)
+;;   :hook ((c++-mode typescript-mode racer-mode) . flycheck-mode))
 
 ;;
 ;; js2-mode
