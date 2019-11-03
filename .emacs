@@ -49,6 +49,10 @@
     (package-install 'cl)
     (package-install 'ruby-mode)
     (package-install 'flycheck)
+    (package-install 'ido)
+    (package-install 'popwin)
+    (package-install 'guide-key)
+    (package-install 'markdown-mode)
     (package-install 'bind-key))
 
   (setq use-package-always-ensure t)
@@ -91,12 +95,6 @@
 (when (functionp 'mac-auto-ascii-mode)
   (mac-auto-ascii-mode 1))
 
-;; tramp
-(use-package tramp
-  :defer t
-  :config
-  (setq tramp-persistency-file-name
-        (concat temporary-file-directory "tramp-" (user-login-name))))
 
 ;;
 ;; other settings

@@ -168,6 +168,22 @@
   :diminish which-key-mode
   :hook (after-init . which-key-mode))
 
+;; guide-key
+(use-package guide-key
+  :diminish guide-key-mode
+  :config
+  (guide-key-mode t)
+  (setq guide-key/highlight-command-regexp
+        '('"rectangle"
+          ("register" . font-lock-type-face)
+          ("bookmark" . "hot pink")
+          ))
+  (setq guide-key/guide-key-sequence '("C-x v"   ;; version control
+                                       "C-c a"   ;; my mode-specific bindings
+                                       "C-c l"   ;; line-jumping
+                                       "C-c r"   ;;
+                                       )))
+
 ;; highlight line
 (use-package hl-line
   :ensure nil

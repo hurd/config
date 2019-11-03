@@ -157,7 +157,13 @@
   )
 )
 
+;;
 ;; markdown
+;;
+;; 1) brew install markdown
+;; 2) brew install multimarkdown
+;; 3) TEST: $ cat README.md | markdown
+;;
 (use-package markdown-mode
   :ensure t
   :commands (markdown-mode gfm-mode)
@@ -165,7 +171,10 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init
-  (setq markdown-command "multimarkdown"))
+  (setq markdown-command "multimarkdown")
+  (setq markdown-command
+        "/usr/local/bin/multimarkdown")
+  (setq markdown-split-window-direction 'right))
 
 ;;
 ;; C/C++ style

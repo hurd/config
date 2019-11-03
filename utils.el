@@ -2,9 +2,28 @@
 ;; $Id$
 ;;
 
-;;
+;; tramp
+(use-package tramp
+  :defer t
+  :config
+  (setq tramp-persistency-file-name
+        (concat temporary-file-directory "tramp-" (user-login-name))))
+
+;; ido
+(use-package ido
+  :config
+  (setq ido-enable-flex-matching t)
+  (ido-everywhere t)
+  (ido-mode t))
+
+;; reformat buffer
+(defun indent-buffer ()
+  (interactive)
+  (save-excursion
+    (indent-region (point-min) (point-max) nil)))
+(global-set-key [f12] 'indent-buffer)
+
 ;; dos --> unix
-;;
 (defun dos2unix ()
   (interactive)
   (save-excursion
@@ -12,9 +31,7 @@
     (while (re-search-forward "\r" nil t)
       (replace-match ""))))
 
-;;
 ;; pbcopy & pbpaste
-;;
 (defun pbcopy ()
   (interactive)
   (call-process-region (point) (mark) "pbcopy")
