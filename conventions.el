@@ -43,6 +43,20 @@
              (when (featurep 'dtrt-indent)
                (dtrt-indent-mode t))))
 
+;; dumb_jump
+;;
+;; 1) brew install the_silver_searcher
+;;
+;; (use-package dumb-jump
+;;   :bind (("M-g o" . dumb-jump-go-other-window)
+;;          ("M-g j" . dumb-jump-go)
+;;          ("M-g b" . dumb-jump-back)
+;;          ("M-g i" . dumb-jump-go-prompt)
+;;          ("M-g x" . dumb-jump-go-prefer-external)
+;;          ("M-g z" . dumb-jump-go-prefer-external-other-window))
+;;   :config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
+;;   :ensure)
+
 ;;
 ;; virtual environment: conda
 ;;
@@ -160,9 +174,8 @@
 ;;
 ;; markdown
 ;;
-;; 1) brew install markdown
-;; 2) brew install multimarkdown
-;; 3) TEST: $ cat README.md | markdown
+;; 1) brew install multimarkdown
+;; 2) TEST: $ cat README.md | markdown
 ;;
 (use-package markdown-mode
   :ensure t

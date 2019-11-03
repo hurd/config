@@ -5,7 +5,7 @@
 ;;
 
 ;(global-set-key [delete] 'delete-char)
-(global-set-key (kbd "M-g") 'goto-line)
+(global-set-key (kbd "M-g g") 'goto-line)
 (global-set-key (kbd "C-h") 'backward-delete-char)
 ;; reload .emacs
 (global-set-key (kbd "M-r")
