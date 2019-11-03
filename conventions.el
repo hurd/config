@@ -17,17 +17,6 @@
 ;; emacs24 stuff
 (when (>= emacs-major-version 24)
   (setq delete-active-region nil))
-;;(add-to-list 'warning-suppress-types '(undo discard-info))
-;; smartparens
-;(use-package smartparens
-;  :hook
-;  (after-init . smartparens-global-mode)
-;  :config
-;  (require 'smartparens-config)
-;  (sp-pair "=" "=" :actions '(wrap))
-;  (sp-pair "+" "+" :actions '(wrap))
-;  (sp-pair "<" ">" :actions '(wrap))
-;  (sp-pair "$" "$" :actions '(wrap)))
 
 ;; fix trailing spaces
 (use-package ws-butler
@@ -53,11 +42,6 @@
                        'delete-trailing-whitespace nil t)
              (when (featurep 'dtrt-indent)
                (dtrt-indent-mode t))))
-
-;; Interactively Do Things (ido-mode)
-(use-package ido
-  :ensure t
-  :init (ido-mode t))
 
 ;;
 ;; virtual environment: conda
@@ -108,26 +92,6 @@
 (setq flycheck-flake8-maximum-line-length 99)
 (setq flycheck-python-pylint-executable "~/miniconda3/bin/pylint")
 (setq flycheck-python-flake8-executable "~/miniconda3/bin/flake8")
-
-;; (use-package company
-;;   :ensure t
-;;   :diminish company-mode
-;;   :config
-;;   (setq company-idle-delay 0.5)
-;;   (setq company-show-numbers t)
-;;   (setq company-tooltip-limit 10)
-;;   (setq company-minimum-prefix-length 2)
-;;   (setq company-tooltip-align-annotations t)
-;;   ;; invert the navigation direction if the the completion popup-isearch-match
-;;   ;; is displayed on top (happens near the bottom of windows)
-;;   (setq company-tooltip-flip-when-above t)
-;;   (global-company-mode))
-
-;; flycheck
-;; (use-package flycheck
-;;   :ensure t
-;;   :if (display-graphic-p)
-;;   :hook ((c++-mode typescript-mode racer-mode) . flycheck-mode))
 
 ;;
 ;; js2-mode
