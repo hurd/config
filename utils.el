@@ -21,7 +21,7 @@
   (interactive)
   (save-excursion
     (indent-region (point-min) (point-max) nil)))
-(global-set-key [f12] 'indent-buffer)
+(global-set-key [f10] 'indent-buffer)
 
 ;; dos --> unix
 (defun dos2unix ()
