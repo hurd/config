@@ -70,9 +70,16 @@
       '(company-mode
         yasnippet
         js2-mode
+        json-mode
+        web-mode
+        exec-path-from-shell
         js2-refactor
         xref-js2
-        flycheck))
+        prettier-js
+        tide
+        rjsx-mode
+        flycheck
+        flycheck-rust))
 
 (el-get-bundle elpa:jedi-core)
 (el-get-bundle company-jedi :depends (company-mode))
@@ -102,6 +109,8 @@
 (setq jedi:complete-on-dot t)
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
+;(setq-default flycheck-disable-checkers '(c/c++-clang javascript-jshint))
+
 (setq-default flycheck-emacs-lisp-load-path 'inherit)
 (setq flycheck-flake8-maximum-line-length 99)
 (setq flycheck-python-pylint-executable "~/miniconda3/bin/pylint")
@@ -233,6 +242,61 @@
         web-mode-enable-comment-keywords t
         web-mode-enable-current-element-highlight nil
         ))
+
+;;
+;; react
+;;
+;; 1) npm install -g prettier standardx typescript
+;; 2) ln -s ~/work/config/.eslintrc ~/
+;; 3)
+;;
+(defun setup-tide-mode ()
+  "Setup function for tide."
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1)
+  (company-mode +1))
+
+(use-package tide
+  :ensure t
+  :config
+  (defvar company-tooltip-align-annotations)
+  (setq company-tooltip-align-annotations t)
+  (add-hook 'js-mode-hook #'setup-tide-mode))
+
+(setq company-tooltip-align-annotations t)
+(add-hook 'js-mode-hook #'setup-tide-mode)
+(setq flycheck-javascript-eslint-executable "/usr/local/bin/eslint")
+(setq flycheck-javascript-standard-executable "/usr/local/bin/standardx")
+(add-hook 'js-mode-hook 'prettier-js-mode)
+
+(use-package prettier-js
+  :ensure t
+  :hook (js-mode . prettier-js-mode)
+  :init
+  (setq prettier-js-args
+        '(
+          "--arrow-parens" "avoid"
+          "--bracket-spacing" "true"
+          "--jsx-bracket-same-line" "true"
+          "--jsx-single-quote" "true"
+          "--no-bracket-spacing" "false"
+          "--no-semi" "false"
+          "--print-with" "80"
+          "--quote-props" "as-needed"
+          "--single-quote" "true"
+          "--tab-width" "2"
+          "--use-tabs" "false"
+          "--trailing-comma" "es5"
+          )))
+
+(with-eval-after-load 'rjsx-mode
+  (define-key rjsx-mode-map "<" nil)
+  (define-key rjsx-mode-map (kbd "C-d") nil)
+  (define-key rjsx-mode-map ">" nil))
 
 ;; golang
 (use-package go-mode

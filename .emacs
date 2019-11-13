@@ -51,7 +51,6 @@
     (package-install 'web-mode)
     (package-install 'cl)
     (package-install 'ruby-mode)
-    (package-install 'flycheck)
     (package-install 'ido)
     (package-install 'popwin)
     (package-install 'guide-key)
@@ -97,7 +96,6 @@
 
 (when (functionp 'mac-auto-ascii-mode)
   (mac-auto-ascii-mode 1))
-
 
 ;;
 ;; other settings
