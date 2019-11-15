@@ -43,53 +43,23 @@
              (when (featurep 'dtrt-indent)
                (dtrt-indent-mode t))))
 
-;; dumb_jump
-;;
-;; 1) brew install the_silver_searcher
-;;
-;; (use-package dumb-jump
-;;   :bind (("M-g o" . dumb-jump-go-other-window)
-;;          ("M-g j" . dumb-jump-go)
-;;          ("M-g b" . dumb-jump-back)
-;;          ("M-g i" . dumb-jump-go-prompt)
-;;          ("M-g x" . dumb-jump-go-prefer-external)
-;;          ("M-g z" . dumb-jump-go-prefer-external-other-window))
-;;   :config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
-;;   :ensure)
-
 ;;
 ;; virtual environment: conda
 ;;
 ;; 1) conda create -n webdev python
 ;; 2) pip install sexpdata epc
 ;; 3) conda install jedi
-;; 4) cd ~/.emacs.d/el-get/jedi-core && python setup.py install
+;; 4) cd ~/.emacs.d/elpa/jedi-core* && python setup.py install
 ;; 5) conda activate base && pip install flake8 pylint
 ;;
-(setq my:el-get-packages
-      '(company-mode
-        yasnippet
-        js2-mode
-        json-mode
-        web-mode
-        exec-path-from-shell
-        js2-refactor
-        xref-js2
-        prettier-js
-        tide
-        rjsx-mode
-        flycheck
-        flycheck-rust))
-
-(el-get-bundle elpa:jedi-core)
-(el-get-bundle company-jedi :depends (company-mode))
 (eval-after-load "company-jedi"
     '(setq jedi:server-command (list "~/miniconda3/envs/webdev/bin/python" jedi:server-script)))
 (require 'company-jedi)
-(el-get 'sync my:el-get-packages)
+
 
 (add-to-list 'exec-path "~/miniconda3/bin")
 (add-to-list 'exec-path "~/.cargo/bin")
+(add-to-list 'exec-path "/usr/local/bin")
 (setenv "PATH" "~/miniconda3/bin:~/.cargo/bin:$PATH" '("PATH"))
 (use-package conda
   :ensure t
@@ -248,7 +218,6 @@
 ;;
 ;; 1) npm install -g prettier standardx typescript
 ;; 2) ln -s ~/work/config/.eslintrc ~/
-;; 3)
 ;;
 (defun setup-tide-mode ()
   "Setup function for tide."
@@ -293,10 +262,11 @@
           "--trailing-comma" "es5"
           )))
 
-(with-eval-after-load 'rjsx-mode
-  (define-key rjsx-mode-map "<" nil)
-  (define-key rjsx-mode-map (kbd "C-d") nil)
-  (define-key rjsx-mode-map ">" nil))
+(if (version< emacs-version "27.0")
+    (with-eval-after-load 'rjsx-mode
+      (define-key rjsx-mode-map "<" nil)
+      (define-key rjsx-mode-map (kbd "C-d") nil)
+      (define-key rjsx-mode-map ">" nil)))
 
 ;; golang
 (use-package go-mode
